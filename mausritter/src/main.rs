@@ -9,10 +9,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, dice_roll_system)
-        .add_systems(Update, strength_system)
-        .add_systems(Update, dexterity_system)
-        .add_systems(Update, willpower_system)
+        .add_systems(Update, spawn_mouse)
         .run();
 }
 
@@ -25,4 +22,8 @@ fn setup(mut commands: Commands) {
     commands.spawn(Strength { score: AbilityScore::new(10) });
     commands.spawn(Dexterity { score: AbilityScore::new(12) });
     commands.spawn(Willpower { score: AbilityScore::new(14) });
+}
+
+fn spawn_mouse(mut commands: Commands) {
+    commands.spawn(MouseBundle {..Default::default()})
 }
