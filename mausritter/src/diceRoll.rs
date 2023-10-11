@@ -1,18 +1,24 @@
-use bevy::prelude::*;
+use bevy::prelude::
+use rand::Rng;
 
 /// Component to store information for a diceRoll
 #[derive(Component)]
 pub struct DiceRoll {
-    count: i32,
-    sides: i32,
+    count: u32,
+    sides: u32,
     bonus: i32,
 }
 
 /// System to use a diceRoll component to retreive the result of that dice roll
-fn Roll(diceRoll: DiceRoll) {
-    mut result = diceRoll.bonus;
-    for (i: i32 = 0; i < diceRoll.count; i++) {
-        result += rand.range(1, diceRoll.sides+1)
+pub fn dice_roll_system(query: Query<&DiceRoll>) {
+    let mut rng = rand::thread_rng();
+
+    for dice_roll in query,iter() {
+        let mut result = dice_roll.bonus;
+
+        for _ in 0..dice_roll.count {
+            result += rng.gen_range(i..=dice_roll.sides as i32);
+        }
+        println!("Rolled dice ({}d{} + {}): Result = {}", dice_roll.count, dice_roll.sides, dice_roll.bonus, result);
     }
-    return result;
 }
