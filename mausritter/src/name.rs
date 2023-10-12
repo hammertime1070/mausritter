@@ -1,13 +1,12 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct Name(String);
+pub struct Name(pub String);
 
 #[derive(Component)]
 pub struct HP {
-    max: u32,
-    current: i32,
+    pub max: i32,
 }
 
 #[derive(Component)]
-pub struct Pips(i32);
+pub struct Pips(pub i32);

@@ -20,9 +20,10 @@ pub fn dice_roll_system(query: Query<&DiceRoll>) {
             result += rng.gen_range(1..=dice_roll.sides as i32);
         }
         println!("Rolled dice ({}d{} + {}): Result = {}", dice_roll.count, dice_roll.sides, dice_roll.bonus, result);
+    }
 }
 
-pub fn roll(diceRoll: DiceRoll) {
+pub fn roll(dice_roll: &DiceRoll) -> i32 {
     let mut rng = rand::thread_rng();
     let mut result = dice_roll.bonus;
     for _ in 0..dice_roll.count {

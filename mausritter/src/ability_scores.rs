@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 pub struct AbilityScore {
-    value: i32,
+    pub value: i32,
 }
 
 impl AbilityScore {
