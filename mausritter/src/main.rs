@@ -8,12 +8,14 @@ mod ability_scores;
 use ability_scores::{AbilityScore, Strength, Dexterity, Willpower, strength_system, dexterity_system, willpower_system};
 mod new_mouse_bundle;
 use new_mouse_bundle::{ MouseBundle, AttributeBundle };
+mod inventory_grid;
+use inventory_grid:: {spawn_layout};
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, setup)
-        .add_systems(Update, (spawn_mouse, print_new_mice_attributes))
+        .add_systems(Startup, (setup, spawn_layout))
+        // .add_systems(Update, (spawn_mouse, print_new_mice_attributes))
         .run();
 }
 
