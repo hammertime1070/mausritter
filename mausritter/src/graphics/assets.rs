@@ -21,7 +21,7 @@ pub fn load_assets(
         None
     );
     let handle = texture_atlasses.add(atlas);
-    commands.init_resource(
+    commands.insert_resource(
         GraphicsAssets { sprite_texture: handle }
     );
 }

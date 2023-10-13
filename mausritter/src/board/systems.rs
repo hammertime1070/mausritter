@@ -15,7 +15,7 @@ pub fn spawn_map(
         for y in 0..8 {
             let v = Vector2Int::new(x,y);
             let tile = commands.spawn((
-                Position { V },
+                Position { v },
                 Tile
             ))
             .id();
