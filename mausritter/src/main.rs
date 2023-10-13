@@ -1,21 +1,36 @@
 use bevy::prelude::*;
 
-mod dice_roll;
-mod name;
-use name::*;
-use dice_roll::{DiceRoll, dice_roll_system};
-mod ability_scores;
-use ability_scores::{AbilityScore, Strength, Dexterity, Willpower, strength_system, dexterity_system, willpower_system};
-mod new_mouse_bundle;
-use new_mouse_bundle::{ MouseBundle, AttributeBundle };
-mod inventory_grid;
-use inventory_grid:: {spawn_layout};
+mod assets;
+mod board;
+mod camera;
+mod globals;
+mod graphics;
+mod states;
+mod vectors;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_systems(Startup, (setup, spawn_layout))
-        // .add_systems(Update, (spawn_mouse, print_new_mice_attributes))
+        .add_plugins(DefaultPlugins.set(
+            WindowPlugin {
+                primary_window: Some(Window {
+                    resolution: (
+                        globals::WINDOW_WIDTH,
+                        globals::WINDOW_HEIGHT
+                    ).into(),
+                    ..Default::default()
+                }),
+                ..Default::default()<
+            }
+        ).set(
+            ImagePlugin::default_nearest()
+        )
+    )
+        .add_resource(Msaa::Off)
+        .add_state::<states::MainState>()
+        .add_plugin(assets::AssetPlugin)
+        .add_plugin(board::BoardPlugin)
+        .add_plugin(graphics::GraphicsPlugin)
+        .add_systems(Startup, (setup, camera::setup))
         .run();
 }
 
