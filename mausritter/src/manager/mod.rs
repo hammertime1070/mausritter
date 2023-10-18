@@ -9,12 +9,21 @@ pub struct ManagerPlugin;
 
 impl Plugin for ManagerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(OnEnter(MainState::Game), game_start)
-            .add_system(OnExit(MainState::Game), game_end)
-            .add_system(turn_update_start.run_if(on_event::<PlayerInputReadyEvent>()))
-            .add_system(turn_update_end.run_if(on_event::<ActionsCompleteEvent>()))
-            .add_system(turn_update_cancel.run_if(on_event::<InvalidPlayerActionEvent>()))
-            .add_system(tick.run_if(in_state(GameState::TurnUpdate)));
+        app.add_systems(OnEnter(MainState::Game), game_start)
+            .add_systems(OnExit(MainState::Game), game_end)
+            .add_systems(
+                Update,
+                turn_update_start.run_if(on_event::<PlayerInputReadyEvent>()),
+            )
+            .add_systems(
+                Update,
+                turn_update_end.run_if(on_event::<ActionsCompleteEvent>()),
+            )
+            .add_systems(
+                Update,
+                turn_update_cancel.run_if(on_event::<InvalidPlayerActionEvent>()),
+            )
+            .add_systems(Update, tick.run_if(in_state(GameState::TurnUpdate)));
     }
 }
 

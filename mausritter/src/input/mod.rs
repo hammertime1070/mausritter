@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 use std::collections::VecDeque;
 
-use crate::actions::{
-    ActorQueue,
-    models::WalkAction
-};
+use crate::actions::{models::WalkAction, ActorQueue};
 
 use crate::board::components::Position;
 use crate::pieces::components::Actor;
@@ -16,27 +13,36 @@ pub struct InputPlugin;
 
 impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<PlayerInputReadyEvent>()
-        .add_systems(Update, player_position.run_if(in_state(GameState::PlayerInput)));
+        app.add_event::<PlayerInputReadyEvent>().add_systems(
+            Update,
+            player_position.run_if(in_state(GameState::PlayerInput)),
+        );
     }
 }
 
+#[derive(Event)]
 pub struct PlayerInputReadyEvent;
 
 const DIR_KEY_MAPPING: [(KeyCode, Vector2Int); 4] = [
-    (KeyCode::W, Vector2Int::UP), (KeyCode::S, Vector2Int::DOWN),
-    (KeyCode::A, Vector2Int::LEFT), (KeyCode::D, Vector2Int::RIGHT),
+    (KeyCode::W, Vector2Int::UP),
+    (KeyCode::S, Vector2Int::DOWN),
+    (KeyCode::A, Vector2Int::LEFT),
+    (KeyCode::D, Vector2Int::RIGHT),
 ];
 
 fn player_position(
     keys: ResMut<Input<KeyCode>>,
     mut player_query: Query<(Entity, &Position, &mut Actor), With<Player>>,
     mut queue: ResMut<ActorQueue>,
-    mut ev_input: EventWriter<PlayerInputReadyEvent>
+    mut ev_input: EventWriter<PlayerInputReadyEvent>,
 ) {
-    let Ok((entity, position, mut actor)) = player_query.get_single_mut() else { return };
+    let Ok((entity, position, mut actor)) = player_query.get_single_mut() else {
+        return;
+    };
     for (key, dir) in DIR_KEY_MAPPING {
-        if !keys.just_pressed(key) { continue; }
+        if !keys.just_pressed(key) {
+            continue;
+        }
         let action = WalkAction(entity, position.v + dir);
         actor.0 = Some(Box::new(action));
         queue.0 = VecDeque::from([entity]);

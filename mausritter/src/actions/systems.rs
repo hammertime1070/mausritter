@@ -1,11 +1,12 @@
 use bevy::prelude::*;
-use rand::thread_rng;
-
-use crate::{pieces::components::Actor, vectors::ORTHO_DIRECTIONS};
-use crate::player::Player;
+use rand::prelude::*;
 
 use super::models::WalkAction;
 use super::{ActionsCompleteEvent, ActorQueue, InvalidPlayerActionEvent, NextActorEvent};
+use crate::board::components::Position;
+use crate::pieces::components::{Actor, Walk};
+use crate::player::Player;
+use crate::vectors::ORTHO_DIRECTIONS;
 
 pub fn process_action_queue(world: &mut World) {
     let Some(mut queue) = world.get_resource_mut::<ActorQueue>() else {
@@ -34,12 +35,11 @@ pub fn populate_actor_queue(
     queue.0.extend(query.iter());
 }
 
-pub fn plan_walk(
-    mut query: Query<(&Position, &mut Actor), <With<Walk>>,
-    queue: Res<ActorQueue>
-) {
+pub fn plan_walk(mut query: Query<(&Position, &mut Actor), With<Walk>>, queue: Res<ActorQueue>) {
     let Some(entity) = queue.0.get(0) else { return };
-    let Ok((position, mut actor)) = query.get_mut(*entity) else { return };
+    let Ok((position, mut actor)) = query.get_mut(*entity) else {
+        return;
+    };
     let mut rng = thread_rng();
     let dir = ORTHO_DIRECTIONS.choose(&mut rng).unwrap();
     actor.0 = Some(Box::new(WalkAction(*entity, position.v + *dir)));

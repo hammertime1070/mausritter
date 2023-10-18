@@ -14,19 +14,25 @@ impl Plugin for PiecesPlugin {
     }
 }
 
-pub fn spawn_npcs(
-    mut commands: Commands
-) {
+pub fn spawn_npcs(mut commands: Commands) {
     commands.spawn((
-        components::Actor::default()
-        components::Piece { kind: "NPC".to_string() },
-        Position { v: Vector2Int::new(3, 5) },
-        components::Walk
+        components::Actor::default(),
+        components::Piece {
+            kind: "NPC".to_string(),
+        },
+        Position {
+            v: Vector2Int::new(3, 5),
+        },
+        components::Walk,
     ));
     commands.spawn((
-        components::Actor::default()
-        components::Piece { kind: "NPC".to_string() },
-        Position { v: Vector2Int::new(5, 5) },
-        components::Walk
+        components::Actor::default(),
+        components::Piece {
+            kind: "NPC".to_string(),
+        },
+        Position {
+            v: Vector2Int::new(5, 5),
+        },
+        components::Walk,
     ));
 }
